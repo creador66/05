@@ -3,214 +3,223 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+    <!-- Font Awesome CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-... (truncado) ..." crossorigin="anonymous" referrerpolicy="no-referrer" />
   <title>Gestión de Deudas</title>
   <style>
     /* Estilos generales */
     body {
-      margin: 0; padding: 0;
+      margin: 0;
+      padding: 0;
       font-family: 'Inter', sans-serif;
       background: #e0e0e0;
-  
     }
     .container {
-     padding: 1rem;
+      padding: 1rem;
     }
     .card {
-      background: #e0e0e0; border-radius: 12px;
+      background: #e0e0e0;
+      border-radius: 12px;
       box-shadow: 6px 6px 16px #bebebe, -6px -6px 16px #ffffff;
-      padding: 1rem; margin-bottom: 1rem;
+      padding: 1rem;
+      margin-bottom: 1rem;
     }
-    h1, h2 { text-align: center; margin-bottom: .5rem; 
+    h1, h2 {
+      text-align: center;
+      margin-bottom: .5rem;
       font-size: 18px;
     }
-    /* Estilos del formulario */
-form {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-  justify-content: center;
-  align-items: center;
-  background: #fafafa;
-  padding: 1rem;
-  font-family: system-ui, sans-serif;
-}
 
-/* Inputs, selects y botones */
-form input,
-form select,
-form button {
-  flex: 1;
-  min-width: 140px;
-  padding: 0.6rem 0.8rem;
-  background: #ffffff;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  font-size: 1rem;
-  color: #333;
-  transition: border-color 0.2s, box-shadow 0.2s, transform 0.1s;
-  outline: none;
-}
+    /* Formulario */
+    form {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      justify-content: center;
+      align-items: center;
+      background: #fafafa;
+      padding: 1rem;
+    }
+    form input, form select, form button {
+      flex: 1;
+      min-width: 140px;
+      padding: 0.6rem 0.8rem;
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 1rem;
+      color: #333;
+      transition: border-color .2s, box-shadow .2s, transform .1s;
+      outline: none;
+    }
+    form input:focus, form select:focus {
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59,130,246,.2);
+    }
+    form button {
+      cursor: pointer;
+      border: none;
+      background: #3b82f6;
+      color: #fff;
+      font-weight: 500;
+      text-transform: uppercase;
+    }
+    form button:hover { box-shadow: 0 4px 8px rgba(0,0,0,.1); }
+    form button:active { transform: scale(.97); }
+    .form-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .75rem;
+      width: 100%;
+      margin-top: .75rem;
+    }
+    .form-row > * { flex: 1; min-width: 120px; }
+    .form-row.phone { display: none; }
 
-/* Efecto al enfocar inputs y selects */
-form input:focus,
-form select:focus {
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
-}
-
-/* Estilo del botón */
-form button {
-  cursor: pointer;
-  border: none;
-  background: #3b82f6;
-  color: white;
-  font-weight: 500;
-  text-transform: uppercase;
-}
-
-/* Hover y active en botón */
-form button:hover {
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-form button:active {
-  transform: scale(0.97);
-}
-
-/* Agrupación por fila */
-.form-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-  width: 100%;
-  margin-top: 0.75rem;
-}
-.form-row > * {
-  flex: 1;
-  min-width: 120px;
-}
-
-    ul { list-style: none; padding: 0; margin: 1rem 0; }
-    /* Deudas */
-    #pagosList li,
-    #deudasList li {
-      background: #e0e0e0; border-radius: 8px;
-      box-shadow: 4px 4px 8px #bebebe, -4px -4px 8px #ffffff;
-      margin-bottom: .5rem; padding: .75rem;
-      display: flex; flex-wrap: wrap; align-items: center;
+    /* Listas de Deudas y Pagos */
+        #deudasList,
+    #pagosList {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+    }
+    #deudasList li,
+    #pagosList li {
+      width: 100%;
+      box-sizing: border-box;
+      background: #e0e0e0;
+      border-radius: 8px;
+      box-shadow: 4px 4px 8px #bebebe, -4px -4px 8px #fff;
+      margin-bottom: .5rem;
+      padding: .75rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
       gap: .5rem;
     }
-    #deudasList li span.date {
-      flex-basis: 100%;
-      font-size: .9rem; color: #555;
-    }
-    #deudasList li span.desc {
-      flex: 1;
-      font-weight: bold;
-    }
-    #deudasList li span.original,
-    #deudasList li span.restante {
-      font-size: .9rem;
-    }
-    #deudasList li span.original::before { content: "Original: "; }
-    #deudasList li span.restante::before { content: "Restante: "; }
-    .actions {
-      margin-left: auto; display: flex; align-items: center;
-    }
-    .actions button {
-      margin-left: .5rem; padding: .25rem .5rem; font-size: .9rem;
-      border-radius: 6px; border: none;
-      box-shadow: 2px 2px 6px #bebebe, -2px -2px 6px #ffffff;
-      cursor: pointer; background: #e0e0e0; transition: transform .1s;
-    }
-    .actions button:active { transform: scale(.95); }
 
-    /* Pagos */
-
+    /* Info y cuenta */
     .payment-info, .payment-account {
-      display: flex; flex-direction: column;
+      display: flex;
+      flex-direction: column;
     }
     .payment-info .extra, .payment-account .extra {
-      font-size: .9rem; margin-bottom: .25rem;
+      font-size: .9rem;
+      margin-bottom: .25rem;
+      color: #555;
     }
-    .payment-info .desc { font-size: 1rem; }
+    .payment-info .desc { font-size: 1rem; font-weight: bold; }
     .payment-account .amount {
-      font-weight: bold; font-size: 1.1rem; text-align: right;
+      font-weight: bold;
+      font-size: 1.1rem;
+      text-align: right;
     }
 
-    /* Importar / Exportar */
-    .import-export {
-      display: flex; gap: .5rem; justify-content: center;
-      margin-top: .5rem;
+    /* Botones acción */
+    .actions {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
     }
+    .actions button {
+      margin-left: .5rem;
+      padding: .25rem .5rem;
+      font-size: .9rem;
+      border-radius: 6px;
+      border: none;
+      box-shadow: 2px 2px 6px #bebebe, -2px -2px 6px #fff;
+      cursor: pointer;
+      background: #e0e0e0;
+      transition: transform .1s;
+    }
+    .actions button:active { transform: scale(.95); }
+    .actions button.whatsapp {
+      background: #25D366;
+      color: #fff;
+    }
+    .actions button.whatsapp:hover {
+      box-shadow: 0 4px 8px rgba(0,0,0,.2);
+    }
+
+    /* Import/Export y Footer */
+    .import-export { display: flex; gap: .5rem; justify-content: center; margin-top: .5rem; }
     .import-export button {
       flex: 1;
       padding: .5rem;
-      border: none; border-radius: 8px;
+      border: none;
+      border-radius: 8px;
       background: #e0e0e0;
-      box-shadow: 4px 4px 8px #bebebe, -4px -4px 8px #ffffff;
+      box-shadow: 4px 4px 8px #bebebe, -4px -4px 8px #fff;
       cursor: pointer;
       transition: transform .1s;
     }
     .import-export button:active { transform: scale(.98); }
 
-    .footer1{
-      background: #e0e0e0; padding: .75rem 1rem;
-      box-shadow: 6px -6px 16px #bebebe, -6px 6px 16px #ffffff;
-      display: flex; justify-content: space-around; position: sticky; bottom: 0;
+    .footer1 {
+      background: #e0e0e0;
+      padding: .75rem 1rem;
+      box-shadow: 6px -6px 16px #bebebe, -6px 6px 16px #fff;
+      display: flex;
+      justify-content: space-around;
+      position: sticky;
+      bottom: 0;
     }
-    .footer1 div span {
-      display: block; font-size: 1.1rem; font-weight: bold;
+    .footer1 div span { 
+      text-align: center;
+      display: block; font-size: 1.1rem; font-weight: bold; }
+
+    p.copyright {
+      text-align: center;
+      font-size: 14px;
+      color: #999;
+      margin: 20px 0 0;
     }
- .copyright {
-   text-align: center;
-   width: 100%;
-    font-size: 14px;
-    color: #999;
-    margin-top: 20px;
-  }
 
     /* Modal */
     .modal {
       display: none;
-      position: fixed; z-index: 1000;
-      left: 0; top: 0; width: 100%; height: 100%;
-      background: rgba(0,0,0,0.5);
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,.5);
       align-items: center; justify-content: center;
+      z-index: 1000;
     }
     .modal-content {
-      background: #fff; border-radius: 8px;
-      padding: 1rem; max-width: 90%; width: 300px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      background: #fff;
+      padding: 1rem;
+      border-radius: 8px;
+      width: 90%; max-width: 300px;
+      box-shadow: 0 4px 12px rgba(0,0,0,.3);
       position: relative;
     }
     .modal-close {
       position: absolute; top: 8px; right: 12px;
-      font-size: 1.2rem; cursor: pointer;
+      font-size: 1.2rem;
+      cursor: pointer;
     }
-    .modal-body {
-      margin-top: 1.5rem;
-      font-size: 1rem; color: #333;
-    }
+    .modal-body { margin-top: 1.5rem; font-size: 1rem; color: #333; }
     .modal-body textarea {
-      width: 100%; height: 200px; padding: .5rem;
-      border: 1px solid #bebebe; border-radius: 6px;
+      width: 95%; height: 200px;
+      font-size: 16px;
+      border: 1px solid #bebebe;
+      border-radius: 6px;
       resize: vertical;
     }
     .modal-body button {
       width: 100%; padding: .5rem;
       border: none; border-radius: 6px;
       background: #e0e0e0;
-      box-shadow: 4px 4px 8px #bebebe, -4px -4px 8px #ffffff;
-      cursor: pointer; margin-top: .5rem;
+      box-shadow: 4px 4px 8px #bebebe, -4px -4px 8px #fff;
+      cursor: pointer;
+      margin-top: .5rem;
       transition: transform .1s;
     }
     .modal-body button:active { transform: scale(.98); }
   </style>
 </head>
 <body>
-
   <h1>Gestión de Deudas</h1>
   <div class="container">
+
     <!-- Formulario -->
     <div class="card">
       <form id="actionForm">
@@ -222,6 +231,9 @@ form button:active {
         </div>
         <div class="form-row" id="row-desc">
           <input type="text" id="desc" placeholder="Descripción" required/>
+        </div>
+        <div class="form-row phone" id="row-phone">
+          <input type="tel" id="phone" placeholder="Teléfono (10 dígitos)" pattern="\d{10}" />
         </div>
         <div class="form-row" id="row-amt">
           <input type="number" id="amt" placeholder="Monto" required min="0.01" step="0.01"/>
@@ -258,16 +270,16 @@ form button:active {
         <button id="importBtn">Importar</button>
       </div>
     </div>
+
   </div>
 
   <div class="footer1">
     <div>Total Deuda Restante: <span id="totalDeuda">0</span></div>
     <div>Total Pagado: <span id="totalPagado">0</span></div>
-    
   </div>
   <p class="copyright">© 2025 IAEgo. Todos los derechos reservados.</p>
 
-  <!-- Modal reutilizable -->
+  <!-- Modal -->
   <div id="modal" class="modal" onclick="hideModal()">
     <div class="modal-content" onclick="event.stopPropagation()">
       <span class="modal-close" onclick="hideModal()">&times;</span>
@@ -275,197 +287,248 @@ form button:active {
     </div>
   </div>
 
-  <script>
-    let deudas    = JSON.parse(localStorage.getItem('deudas') || '[]');
-    let pagos     = JSON.parse(localStorage.getItem('pagos')  || '[]');
-    let editIndex = null;
-    const $ = id => document.getElementById(id);
+<script>
+  let deudas = JSON.parse(localStorage.getItem('deudas') || '[]');
+  let pagos  = JSON.parse(localStorage.getItem('pagos')  || '[]');
+  let editDebtIndex = null, editPayIndex = null;
+  const $ = id => document.getElementById(id);
 
-    // Asegurar campo original en deudas
-    deudas = deudas.map(d => {
-      if (typeof d.original === 'undefined') d.original = d.restante;
-      return d;
-    });
+  deudas = deudas.map(d => {
+    if (d.original === undefined) d.original = d.restante;
+    if (d.phone    === undefined) d.phone    = '';
+    return d;
+  });
 
-    function getCurrentDate() {
-      const today = new Date();
-      const y = today.getFullYear();
-      const m = String(today.getMonth() + 1).padStart(2, '0');
-      const d = String(today.getDate()).padStart(2, '0');
-      return `${y}-${m}-${d}`;
-    }
+  function getCurrentDate() {
+    const t = new Date();
+    return `${t.getFullYear()}-${String(t.getMonth()+1).padStart(2,'0')}-${String(t.getDate()).padStart(2,'0')}`;
+  }
+  const save = () => {
+    localStorage.setItem('deudas', JSON.stringify(deudas));
+    localStorage.setItem('pagos', JSON.stringify(pagos));
+  };
 
-    const save = () => {
-      localStorage.setItem('deudas', JSON.stringify(deudas));
-      localStorage.setItem('pagos', JSON.stringify(pagos));
-    };
+  function showModal(html) {
+    $('modal-body').innerHTML = html;
+    $('modal').style.display = 'flex';
+  }
+  function hideModal() {
+    $('modal').style.display = 'none';
+  }
 
-    function showModal(html) {
-      $('modal-body').innerHTML = html;
-      $('modal').style.display    = 'flex';
-    }
-    function hideModal() {
-      $('modal').style.display = 'none';
-    }
+  // NUEVO: confirma y borra deuda + pagos
+  function confirmDeleteDebt(i) {
+    // Elimina todos los pagos asociados
+    pagos = pagos.filter(p => p.deudaIndex !== i);
+    // Ajusta índices de pagos posteriores (opcional si no los usas)
+    pagos = pagos.map(p => ({
+      ...p,
+      deudaIndex: p.deudaIndex > i ? p.deudaIndex - 1 : p.deudaIndex
+    }));
+    // Elimina la deuda
+    deudas.splice(i, 1);
+    hideModal();
+    save();
+    render();
+  }
 
-    function toggleMode() {
-      const isD = $('actionType').value === 'nuevaDeuda';
-      $('row-deuda').style.display     = isD ? 'none' : 'flex';
-      $('desc').required               = isD;
-      $('submitBtn').textContent       = isD ? 'Añadir Deuda' : 'Registrar Pago';
-      $('desc').placeholder            = isD ? 'Descripción de la Deuda' : 'Nota (opcional)';
-    }
+  function toggleMode() {
+    const isDeuda = $('actionType').value === 'nuevaDeuda';
+    $('row-deuda').style.display  = isDeuda ? 'none' : 'flex';
+    $('row-phone').style.display  = isDeuda ? 'flex' : 'none';
+    $('desc').required = isDeuda;
+    $('phone').required = isDeuda;
+    $('submitBtn').textContent = isDeuda
+      ? (editDebtIndex!==null ? 'Guardar Deuda' : 'Añadir Deuda')
+      : (editPayIndex!==null   ? 'Guardar Pago'  : 'Registrar Pago');
+    $('desc').placeholder = isDeuda ? 'Descripción de la Deuda' : 'Nota (opcional)';
+  }
 
-    function render() {
-      // Render deudas
-      let sumRest = 0;
-      $('deudasList').innerHTML = deudas.map((d,i) => {
-        sumRest += d.restante;
-        return `
-          <li>
-            <span class="date">${d.date}</span>
+  function render() {
+    // Deudas
+    let sumRest = 0;
+    $('deudasList').innerHTML = deudas.map((d,i) => {
+      sumRest += d.restante;
+      return `
+        <li>
+          <div class="payment-info">
+            <span class="extra">${d.date}</span>
             <span class="desc">${d.desc}</span>
-            <span class="original">${d.original.toFixed(2)}</span>
-            <span class="restante">${d.restante.toFixed(2)}</span>
-            <div class="actions">
-              <button onclick="delDebt(${i})">&times;</button>
-            </div>
-          </li>`;
-      }).join('');
-      $('totalDeuda').textContent = sumRest.toFixed(2);
+          </div>
+          <div class="payment-account">
+            <span class="extra">Original: ${d.original.toFixed(2)}</span>
+            <span class="amount">${d.restante.toFixed(2)}</span>
+          </div>
+          <span class="extra">Tel: ${d.phone}</span>
+          <div class="actions">
+            <button onclick="startEditDebt(${i})"><i class="fa-solid fa-user-pen"></i></button>
+            <button onclick="delDebt(${i})"><i class="fa-solid fa-user-xmark"></i></button>
+            <button class="whatsapp" onclick="sendWhatsAppDebt(${i})"><i class="fa-brands fa-whatsapp"></i></button>
+          </div>
+        </li>`;
+    }).join('');
+    $('totalDeuda').textContent = sumRest.toFixed(2);
 
-      // Selector de deudas
-      $('deudaSelect').innerHTML = deudas.map((d,i)=>
-        `<option value="${i}">${d.desc} (${d.restante.toFixed(2)})</option>`
-      ).join('');
+    // Selector pagos
+    $('deudaSelect').innerHTML = deudas.map((d,i)=>
+      `<option value="${i}">${d.desc} (${d.restante.toFixed(2)})</option>`
+    ).join('');
 
-      // Render pagos
-      let sumP = 0;
-      $('pagosList').innerHTML = pagos.map((p,i) => {
-        sumP += p.amt;
-        const nom = deudas[p.deudaIndex]?.desc || '—';
-        return `
-          <li>
-            <div class="payment-info">
-              <span class="extra">${p.date}</span>
-              <span class="desc">${p.desc || '(sin nota)'}</span>
-            </div>
-            <div class="payment-account">
-              <span class="extra">${nom}</span>
-              <span class="amount">${p.amt.toFixed(2)}</span>
-            </div>
-            <div class="actions">
-              <button onclick="startEdit(${i})">✎</button>
-              <button onclick="delPay(${i})">&times;</button>
-            </div>
-          </li>`;
-      }).join('');
-      $('totalPagado').textContent = sumP.toFixed(2);
-    }
+    // Pagos
+    let sumP = 0;
+    $('pagosList').innerHTML = pagos.map((p,i) => {
+      sumP += p.amt;
+      const nom = deudas[p.deudaIndex]?.desc || '—';
+      return `
+        <li>
+          <div class="payment-info">
+            <span class="extra">${p.date}</span>
+            <span class="desc">${p.desc||'(sin nota)'}</span>
+          </div>
+          <div class="payment-account">
+            <span class="extra">${nom}</span>
+            <span class="amount">${p.amt.toFixed(2)}</span>
+          </div>
+          <div class="actions">
+            <button onclick="startEditPay(${i})">✎</button>
+            <button onclick="delPay(${i})">&times;</button>
+          </div>
+        </li>`;
+    }).join('');
+    $('totalPagado').textContent = sumP.toFixed(2);
+  }
 
-    function delDebt(i) {
-      if (pagos.some(p=>p.deudaIndex===i)) {
-        showModal('No puedes eliminar una deuda que ya tiene pagos.');
-      } else {
-        deudas.splice(i,1);
-        save(); render();
-      }
-    }
-
-    function delPay(i) {
-      const p = pagos.splice(i,1)[0];
-      deudas[p.deudaIndex].restante += p.amt;
+  function delDebt(i) {
+    // Si hay pagos, mostramos modal de confirmación
+    if (pagos.some(p => p.deudaIndex === i)) {
+      showModal(`
+        <p>Esta deuda tiene pagos registrados. Si la eliminas, se borrará también todo su historial de pagos.</p>
+        <div style="display:flex;gap:1rem;justify-content:flex-end">
+          <button onclick="confirmDeleteDebt(${i})">Confirmar</button>
+          <button onclick="hideModal()">Cancelar</button>
+        </div>
+      `);
+    } else {
+      // Si no hay pagos, basta con borrar directamente
+      deudas.splice(i,1);
       save(); render();
     }
+  }
 
-    function startEdit(i) {
-      const p = pagos[i];
-      editIndex = i;
-      $('actionType').value = 'pago';
-      toggleMode();
-      $('deudaSelect').value = p.deudaIndex;
-      $('desc').value        = p.desc;
-      $('amt').value         = p.amt;
-      $('date').value        = p.date;
-      $('submitBtn').textContent = 'Guardar Pago';
-    }
+  function delPay(i) {
+    const p = pagos.splice(i,1)[0];
+    deudas[p.deudaIndex].restante += p.amt;
+    save(); render();
+  }
 
-    $('actionForm').onsubmit = e => {
-      e.preventDefault();
-      const m  = +$('amt').value;
-      const dt = $('date').value || getCurrentDate();
+  function startEditDebt(i) {
+    const d = deudas[i];
+    editDebtIndex = i;
+    $('actionType').value = 'nuevaDeuda';
+    toggleMode();
+    $('desc').value  = d.desc;
+    $('amt').value   = d.original;
+    $('date').value  = d.date;
+    $('phone').value = d.phone;
+  }
+  function startEditPay(i) {
+    const p = pagos[i];
+    editPayIndex = i;
+    $('actionType').value = 'pago';
+    toggleMode();
+    $('deudaSelect').value = p.deudaIndex;
+    $('desc').value       = p.desc;
+    $('amt').value        = p.amt;
+    $('date').value       = p.date;
+  }
 
-      if ($('actionType').value === 'nuevaDeuda') {
-        deudas.push({ desc: $('desc').value.trim(), original: m, restante: m, date: dt });
+  $('actionForm').onsubmit = e => {
+    e.preventDefault();
+    const m    = +$('amt').value;
+    const dt   = $('date').value || getCurrentDate();
+    const note = $('desc').value.trim();
+    if ($('actionType').value === 'nuevaDeuda') {
+      const ph = $('phone').value.trim();
+      if (editDebtIndex!==null) {
+        const d = deudas[editDebtIndex];
+        const paid = d.original - d.restante;
+        d.desc     = note;
+        d.original = m;
+        d.restante = Math.max(0, m - paid);
+        d.date     = dt;
+        d.phone    = ph;
+        editDebtIndex = null;
       } else {
-        const di = +$('deudaSelect').value;
-        if (editIndex !== null) {
-          deudas[pagos[editIndex].deudaIndex].restante += pagos[editIndex].amt;
-        }
-        deudas[di].restante = Math.max(0, deudas[di].restante - m);
-        const obj = { deudaIndex: di, desc: $('desc').value.trim(), amt: m, date: dt };
-        if (editIndex === null) {
-          pagos.push(obj);
-        } else {
-          pagos[editIndex] = obj;
-          editIndex = null;
-        }
+        deudas.push({ desc: note, original: m, restante: m, date: dt, phone: ph });
       }
-
-      $('actionForm').reset();
-      $('date').value = getCurrentDate();
-      toggleMode();
-      save(); render();
-    };
-
-    // — Funciones Import/Export —
-
-    function exportData() {
-      const data = { deudas, pagos };
-      const json = JSON.stringify(data, null, 2);
-      showModal(`
-        <textarea id="exportArea">${json}</textarea>
-        <button onclick="copyExport()">Copiar JSON</button>
-      `);
-    }
-
-    function copyExport() {
-      const ta = document.getElementById('exportArea');
-      ta.select();
-      document.execCommand('copy');
-      showModal('<p>JSON copiado al portapapeles.</p>');
-    }
-
-    function importData() {
-      showModal(`
-        <textarea id="importArea" placeholder="Pega aquí el JSON"></textarea>
-        <button onclick="handleImport()">Importar datos</button>
-      `);
-    }
-
-    function handleImport() {
-      try {
-        const raw = document.getElementById('importArea').value;
-        const data = JSON.parse(raw);
-        if (!Array.isArray(data.deudas) || !Array.isArray(data.pagos)) {
-          throw 'El JSON debe tener arrays de "deudas" y "pagos".';
-        }
-        deudas = data.deudas;
-        pagos  = data.pagos;
-        save(); render(); hideModal();
-      } catch (e) {
-        showModal(`<p>JSON inválido: ${e}</p>`);
+    } else {
+      const di = +$('deudaSelect').value;
+      if (editPayIndex!==null) {
+        const old = pagos[editPayIndex];
+        deudas[old.deudaIndex].restante += old.amt;
+      }
+      deudas[di].restante = Math.max(0, deudas[di].restante - m);
+      const obj = { deudaIndex: di, desc: note, amt: m, date: dt };
+      if (editPayIndex!==null) {
+        pagos[editPayIndex] = obj;
+        editPayIndex = null;
+      } else {
+        pagos.push(obj);
       }
     }
+    $('actionForm').reset();
+    $('date').value = getCurrentDate();
+    toggleMode();
+    save(); render();
+  };
 
-    // Inicialización
-    window.addEventListener('DOMContentLoaded', () => {
-      $('exportBtn').onclick = exportData;
-      $('importBtn').onclick = importData;
-      $('date').value = getCurrentDate();
-      toggleMode();
-      render();
-    });
-  </script>
+  // Import/Export
+  function exportData() {
+    const data = { deudas, pagos };
+    const json = JSON.stringify(data, null, 2);
+    showModal(`<textarea id="exportArea">${json}</textarea><button onclick="copyExport()">Copiar JSON</button>`);
+  }
+  function copyExport() {
+    const ta = document.getElementById('exportArea');
+    ta.select();
+    document.execCommand('copy');
+    showModal('<p>JSON copiado al portapapeles.</p>');
+  }
+  function importData() {
+    showModal(`<textarea id="importArea" placeholder="Pega aquí el JSON"></textarea><button onclick="handleImport()">Importar datos</button>`);
+  }
+  function handleImport() {
+    try {
+      const raw = document.getElementById('importArea').value;
+      const data = JSON.parse(raw);
+      if (!Array.isArray(data.deudas)||!Array.isArray(data.pagos)) throw 'El JSON debe tener arrays de deudas y pagos.';
+      deudas = data.deudas; pagos = data.pagos;
+      save(); render(); hideModal();
+    } catch(e) {
+      showModal(`<p>JSON inválido: ${e}</p>`);
+    }
+  }
+
+  // Envío WhatsApp
+  function sendWhatsAppDebt(index) {
+    const d = deudas[index];
+    const pagosDeuda = pagos.filter(p=>p.deudaIndex===index);
+    const totalPag = pagosDeuda.reduce((s,p)=>s+p.amt,0);
+    let msg = `*Detalle de Cuenta*\nDescripción: ${d.desc}\nFecha: ${d.date}\nMonto orig.: ${d.original.toFixed(2)}\nRestante: ${d.restante.toFixed(2)}\n\n*Pagos (${pagosDeuda.length})*\n`;
+    pagosDeuda.forEach((p,i)=> msg += `${i+1}. ${p.date} – ${p.amt.toFixed(2)} (${p.desc||'sin nota'})\n`);
+    msg += `\n*Total pagado:* ${totalPag.toFixed(2)}`;
+    window.location.href = `https://api.whatsapp.com/send?phone=52${d.phone}&text=${encodeURIComponent(msg)}`;
+  }
+
+  // Init
+  window.addEventListener('DOMContentLoaded', () => {
+    $('exportBtn').onclick = exportData;
+    $('importBtn').onclick = importData;
+    $('date').value = getCurrentDate();
+    toggleMode();
+    render();
+  });
+</script>
+
 </body>
 </html>
